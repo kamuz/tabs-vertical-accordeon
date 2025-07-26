@@ -1,332 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Responsive Tabs</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Tabs/Accordion - Unified</title>
     <style>
-        body, button {
-            font-family: 'Segoe UI', 'Ubuntu', sans-serif;
-            line-height: 1.5;
+    body,
+    button {
+        font-family: 'Segoe UI', 'Ubuntu', sans-serif;
+        line-height: 1.5;
+        margin: 0;
+        padding: 30px;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        overflow: hidden;
+    }
+
+    .tab {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .tab-button {
+        width: 100%;
+        padding: 15px 20px;
+        background-color: #f8f9fa;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        font-size: 14px;
+        color: #495057;
+        transition: background-color 0.2s ease;
+    }
+
+    .tab-button.active {
+        background-color: #ccc;
+    }
+
+    .tab-panel {
+        display: none;
+        padding: 20px 30px;
+        background: white;
+    }
+
+    .tab-panel.active {
+        display: block;
+    }
+
+    .content-title {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #212529;
+    }
+
+    .content-text {
+        margin-bottom: 15px;
+        color: #6c757d;
+    }
+
+    /* Desktop Layout */
+    @media (min-width: 769px) {
+        .tabs-container {
+            display: flex;
         }
-        .container {
-            max-width: 1000px;
-            margin: 50px auto;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
+
+        .tab-list {
+            width: 250px;
+            border-right: 1px solid #dee2e6;
+            background: #f8f9fa;
+            flex-shrink: 0;
+        }
+
+        .tab-content {
+            flex: 1;
+        }
+
+        .tab {
+            border-bottom: none;
+        }
+
+        .tab-button {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* Only show the panel in .tab-content on desktop */
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.desktop-active {
+            display: block;
+        }
+
+        /* Hide mobile accordion panels on desktop */
+        .tab .tab-panel {
+            display: none !important;
+        }
+    }
+
+    /* Mobile Accordion Layout */
+    @media (max-width: 768px) {
+        .tab-panel {
+            max-height: 0;
             overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 20px;
         }
 
-        /* Desktop styles - Vertical tabs */
-        @media (min-width: 769px) {
-            .tabs-container {
-                display: flex;
-                min-height: 400px;
-            }
-
-            /* Tab navigation on the left */
-            .tab-list {
-                width: 250px;
-                background-color: #f8f9fa;
-                border-right: 1px solid #dee2e6;
-            }
-
-            .tab-button {
-                display: block;
-                width: 100%;
-                padding: 15px 20px;
-                background: none;
-                border: none;
-                text-align: left;
-                cursor: pointer;
-                font-size: 14px;
-                color: #495057;
-                border-bottom: 1px solid #dee2e6;
-                transition: background-color 0.2s ease;
-            }
-
-            .tab-button:hover {
-                background-color: #e9ecef;
-            }
-
-            .tab-button.active {
-                background-color: #ccc;
-            }
-
-            /* Content area on the right */
-            .tab-content {
-                flex: 1;
-                padding: 30px;
-            }
-
-            .tab-panel {
-                display: none;
-            }
-
-            .tab-panel.active {
-                display: block;
-            }
-
-            /* Hide mobile accordion on desktop */
-            .accordion-container {
-                display: none;
-            }
+        .tab-panel.active {
+            max-height: 500px;
+            padding: 20px;
         }
-
-        /* Mobile styles - Accordion */
-        @media (max-width: 768px) {
-            /* Hide desktop tabs on mobile */
-            .tabs-container {
-                display: none;
-            }
-
-            .accordion-container {
-                display: block;
-            }
-
-            .accordion-item {
-                border-bottom: 1px solid #dee2e6;
-            }
-
-            .accordion-header {
-                width: 100%;
-                padding: 15px 20px;
-                background-color: #f8f9fa;
-                border: none;
-                text-align: left;
-                cursor: pointer;
-                font-size: 14px;
-                color: #495057;
-                transition: background-color 0.2s ease;
-                position: relative;
-            }
-
-            .accordion-header.active {
-                background-color: #ccc;
-            }
-
-            /* Accordion content with smooth slide animation */
-            .accordion-content {
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-                background-color: white;
-            }
-
-            .accordion-content.active {
-                max-height: 300px;
-            }
-
-            .accordion-panel {
-                padding: 20px;
-            }
-        }
-
-        /* Content styling for both versions */
-        .content-title {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #212529;
-        }
-
-        .content-text {
-            margin-bottom: 15px;
-            color: #6c757d;
-        }
+    }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <!-- Desktop Version - Vertical Tabs -->
         <div class="tabs-container">
+            <!-- Tab buttons and panels combined in one place -->
             <div class="tab-list">
-                <button class="tab-button active" data-tab="home">Home</button>
-                <button class="tab-button" data-tab="about">About</button>
-                <button class="tab-button" data-tab="services">Services</button>
-                <button class="tab-button" data-tab="portfolio">Portfolio</button>
-                <button class="tab-button" data-tab="contact">Contact</button>
-            </div>
-
-            <div class="tab-content">
-                <div class="tab-panel active" id="home">
-                    <h2 class="content-title">Welcome Home</h2>
-                    <p class="content-text">
-                        Welcome to our platform! This is the home section where you'll find all the latest updates and featured content.
-                    </p>
-                    <p class="content-text">
-                        Experience seamless navigation with our responsive design that works perfectly on both desktop and mobile devices.
-                    </p>
-                </div>
-
-                <div class="tab-panel" id="about">
-                    <h2 class="content-title">About Us</h2>
-                    <p class="content-text">
-                        We're passionate about creating exceptional user experiences through innovative design and development.
-                    </p>
-                    <p class="content-text">
-                        Our team combines creativity with technical expertise to build solutions that truly make a difference.
-                    </p>
-                </div>
-
-                <div class="tab-panel" id="services">
-                    <h2 class="content-title">Our Services</h2>
-                    <p class="content-text">
-                        We offer a comprehensive range of digital services to help your business thrive in the modern world.
-                    </p>
-                    <p class="content-text">
-                        From concept to deployment, we handle every aspect of your digital transformation journey.
-                    </p>
-                </div>
-
-                <div class="tab-panel" id="portfolio">
-                    <h2 class="content-title">Portfolio</h2>
-                    <p class="content-text">
-                        Take a look at some of our recent projects and see how we've helped businesses achieve their goals.
-                    </p>
-                    <p class="content-text">
-                        Each project showcases our commitment to quality, innovation, and client satisfaction.
-                    </p>
-                </div>
-
-                <div class="tab-panel" id="contact">
-                    <h2 class="content-title">Get In Touch</h2>
-                    <p class="content-text">
-                        Ready to start your next project? We'd love to hear from you and discuss how we can help.
-                    </p>
-                    <p class="content-text">
-                        Let's work together to bring your vision to life with cutting-edge technology and creative design.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Version - Accordion -->
-        <div class="accordion-container">
-            <div class="accordion-item">
-                <button class="accordion-header active" data-accordion="acc-home">Home</button>
-                <div class="accordion-content active" id="acc-home">
-                    <div class="accordion-panel">
+                <div class="tab">
+                    <button class="tab-button active" data-tab="home">Home</button>
+                    <div class="tab-panel active" id="home">
                         <h2 class="content-title">Welcome Home</h2>
-                        <p class="content-text">
-                            Welcome to our platform! This is the home section where you'll find all the latest updates and featured content.
-                        </p>
+                        <p class="content-text">Welcome to our platform! This is the home section where you'll find all the latest updates and featured content.</p>
+                        <p class="content-text">Experience seamless navigation with our responsive design that works perfectly on both desktop and mobile devices.</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="accordion-item">
-                <button class="accordion-header" data-accordion="acc-about">About</button>
-                <div class="accordion-content" id="acc-about">
-                    <div class="accordion-panel">
+                <div class="tab">
+                    <button class="tab-button" data-tab="about">About</button>
+                    <div class="tab-panel" id="about">
                         <h2 class="content-title">About Us</h2>
-                        <p class="content-text">
-                            We're passionate about creating exceptional user experiences through innovative design and development.
-                        </p>
+                        <p class="content-text">We're passionate about creating exceptional user experiences through innovative design and development.</p>
+                        <p class="content-text">Our team combines creativity with technical expertise to build solutions that truly make a difference.</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="accordion-item">
-                <button class="accordion-header" data-accordion="acc-services">Services</button>
-                <div class="accordion-content" id="acc-services">
-                    <div class="accordion-panel">
+                <div class="tab">
+                    <button class="tab-button" data-tab="services">Services</button>
+                    <div class="tab-panel" id="services">
                         <h2 class="content-title">Our Services</h2>
-                        <p class="content-text">
-                            We offer a comprehensive range of digital services to help your business thrive in the modern world.
-                        </p>
+                        <p class="content-text">We offer a comprehensive range of digital services to help your business thrive in the modern world.</p>
+                        <p class="content-text">From concept to deployment, we handle every aspect of your digital transformation journey.</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="accordion-item">
-                <button class="accordion-header" data-accordion="acc-portfolio">Portfolio</button>
-                <div class="accordion-content" id="acc-portfolio">
-                    <div class="accordion-panel">
+                <div class="tab">
+                    <button class="tab-button" data-tab="portfolio">Portfolio</button>
+                    <div class="tab-panel" id="portfolio">
                         <h2 class="content-title">Portfolio</h2>
-                        <p class="content-text">
-                            Take a look at some of our recent projects and see how we've helped businesses achieve their goals.
-                        </p>
+                        <p class="content-text">Take a look at some of our recent projects and see how we've helped businesses achieve their goals.</p>
+                        <p class="content-text">Each project showcases our commitment to quality, innovation, and client satisfaction.</p>
+                    </div>
+                </div>
+                <div class="tab">
+                    <button class="tab-button" data-tab="contact">Contact</button>
+                    <div class="tab-panel" id="contact">
+                        <h2 class="content-title">Get In Touch</h2>
+                        <p class="content-text">Ready to start your next project? We'd love to hear from you and discuss how we can help.</p>
+                        <p class="content-text">Let's work together to bring your vision to life with cutting-edge technology and creative design.</p>
                     </div>
                 </div>
             </div>
-
-            <div class="accordion-item">
-                <button class="accordion-header" data-accordion="acc-contact">Contact</button>
-                <div class="accordion-content" id="acc-contact">
-                    <div class="accordion-panel">
-                        <h2 class="content-title">Get In Touch</h2>
-                        <p class="content-text">
-                            Ready to start your next project? We'd love to hear from you and discuss how we can help.
-                        </p>
-                    </div>
-                </div>
+            <!-- Desktop-only panel display area -->
+            <div class="tab-content">
+                <div class="tab-panel desktop-active" data-tab="home"></div>
+                <div class="tab-panel" data-tab="about"></div>
+                <div class="tab-panel" data-tab="services"></div>
+                <div class="tab-panel" data-tab="portfolio"></div>
+                <div class="tab-panel" data-tab="contact"></div>
             </div>
         </div>
     </div>
-
     <script>
-        // Wait for DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Select tab buttons and all tab panel elements
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+        const desktopPanels = document.querySelectorAll('.tab-content .tab-panel');
 
-            // DESKTOP TABS FUNCTIONALITY
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabPanels = document.querySelectorAll('.tab-panel');
+        // Helper function to detect mobile view based on screen width
+        const isMobileView = () => window.innerWidth <= 768;
 
-            // Add click event listener to each tab button
-            tabButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    // Get the target tab ID from data attribute
-                    const targetTab = this.getAttribute('data-tab');
+        // Copy content from mobile panel to desktop panel to avoid duplication
+        const syncContent = id => {
+            const source = document.getElementById(id); // Mobile content
+            const target = document.querySelector(`.tab-content .tab-panel[data-tab="${id}"]`); // Desktop content
+            if (source && target) target.innerHTML = source.innerHTML;
+        };
 
-                    // Remove active class from all tab buttons
-                    tabButtons.forEach(function(btn) {
-                        btn.classList.remove('active');
-                    });
+        // Activate a tab by ID
+        const activateTab = id => {
+            // Set active state on the correct button
+            tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === id));
 
-                    // Remove active class from all tab panels
-                    tabPanels.forEach(function(panel) {
-                        panel.classList.remove('active');
-                    });
+            // Remove active classes from all panels (both desktop and mobile)
+            tabPanels.forEach(panel => panel.classList.remove('active', 'desktop-active'));
 
-                    // Add active class to clicked button
-                    this.classList.add('active');
+            if (isMobileView()) {
+                // Show mobile accordion panel
+                document.getElementById(id)?.classList.add('active');
+            } else {
+                // Sync and show desktop tab content
+                syncContent(id);
+                document.querySelector(`.tab-content .tab-panel[data-tab="${id}"]`)?.classList.add('desktop-active');
+            }
+        };
 
-                    // Add active class to corresponding panel
-                    document.getElementById(targetTab).classList.add('active');
-                });
-            });
+        // Initial tab setup (defaults to 'home' if none is active)
+        activateTab(document.querySelector('.tab-button.active')?.dataset.tab || 'home');
 
-            // MOBILE ACCORDION FUNCTIONALITY
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            const accordionContents = document.querySelectorAll('.accordion-content');
+        // Handle tab button click events
+        tabButtons.forEach(btn =>
+            btn.addEventListener('click', () => activateTab(btn.dataset.tab))
+        );
 
-            // Add click event listener to each accordion header
-            accordionHeaders.forEach(function(header) {
-                header.addEventListener('click', function() {
-                    // Get the target accordion ID from data attribute
-                    const targetAccordion = this.getAttribute('data-accordion');
-                    const targetContent = document.getElementById(targetAccordion);
+        // Track view mode to respond only when layout switches between mobile/desktop
+        let wasMobile = isMobileView();
 
-                    // Check if current accordion is already active
-                    const isCurrentlyActive = this.classList.contains('active');
-
-                    // Close all accordion items
-                    accordionHeaders.forEach(function(h) {
-                        h.classList.remove('active');
-                    });
-                    accordionContents.forEach(function(c) {
-                        c.classList.remove('active');
-                    });
-
-                    // If the clicked accordion wasn't active, open it
-                    if (!isCurrentlyActive) {
-                        this.classList.add('active');
-                        targetContent.classList.add('active');
-                    }
-                });
-            });
+        // Re-activate tab on resize if view mode changed (e.g., mobile <-> desktop)
+        window.addEventListener('resize', () => {
+            const nowMobile = isMobileView();
+            if (nowMobile !== wasMobile) {
+                wasMobile = nowMobile;
+                const active = document.querySelector('.tab-button.active')?.dataset.tab;
+                if (active) activateTab(active);
+            }
         });
+    });
     </script>
 </body>
+
 </html>
